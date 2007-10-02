@@ -35,7 +35,7 @@ namespace MergeSvnRepos
 		{
 			get
 			{
-				if( m_cur_rev >= m_dates.Length )
+				if( m_cur_rev > m_dates.Length )
 					return DateTime.MaxValue;
 				else
 					return m_dates[m_cur_rev - 1];
@@ -107,7 +107,7 @@ namespace MergeSvnRepos
 				StringBuilder    sb  = new StringBuilder();
 				ProcessStartInfo psi = new ProcessStartInfo();
 
-				psi.Arguments              = "log " + url + " --xml --revision 0:head --non-interactive";
+				psi.Arguments              = "log " + url + " --xml --non-interactive";
 				psi.CreateNoWindow         = true;
 				psi.FileName               = "svn";
 				psi.RedirectStandardOutput = true;
@@ -132,6 +132,8 @@ namespace MergeSvnRepos
 
 			for( int i = 0; i < ret.Length; i++ )
 				ret[i] = DateTime.Parse(nodes[i].FirstChild.Value).ToUniversalTime();
+
+			Console.WriteLine("\tLoaded {0} revision dates from {1}", ret.Length, path);
 
 			return ret;
 		}
